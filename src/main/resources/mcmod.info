@@ -1,0 +1,16 @@
+[
+{
+  "modid": "spicyrunes",
+  "name": "Spicy Runes",
+  "description": "The spiciest runes.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["vtsman"],
+  "credits": "Dank memes",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": [spicycore]
+}
+]

@@ -1,0 +1,6 @@
+[submodule "core"]
+	path = core
+	url = https://github.com/SummerModVenture/SpicyCore
+[submodule "ASMHelper"]
+	path = ASMHelper
+	url = https://github.com/squeek502/ASMHelper.git

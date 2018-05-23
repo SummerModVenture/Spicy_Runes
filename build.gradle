@@ -20,6 +20,13 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': 'com.spicymemes.runes.coremod.CoreMod'
+        attributes 'FMLCorePluginContainsMod': 'true'
+    }
+}
+
 minecraft {
     version = "1.12.2-14.23.3.2655"
     runDir = "run"
@@ -55,6 +62,9 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     //compileOnly files("/Users/Spencer/Downloads/Common/build/classes/artifacts/spicycore_dev.jar")
+    compile project(":core")
+    compile project(":ASMHelper")
+    compile group: 'org.ow2.asm', name: 'asm', version: '5.0.3'
 }
 
 processResources {
@@ -62,11 +72,11 @@ processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
+    // coremod stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
                 
-        // replace version and mcversion
+        // coremod version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
         

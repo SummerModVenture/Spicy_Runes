@@ -1,5 +1,6 @@
 package com.spicymemes.runes.coremod;
 
+import com.spicymemes.runes.blocks.SunshineController;
 import net.minecraft.block.BlockGlowstone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -15,6 +16,11 @@ public class WorldPatches{
         //System.out.println("SPOOPY");
         return true;
     }
+
+    public static boolean seeBottle(Object o, BlockPos pos){
+        return SunshineController.inBottleRange(pos);
+    }
+
     public static boolean isOpaqueCube(Object gs, IBlockState bs, int x, Random pos){
         System.out.println("SPICY MEMES");
         return true;

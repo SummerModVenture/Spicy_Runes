@@ -17,25 +17,25 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid= MainMod.MODID)
 public class ModBlocks {
 
-    public static Block testBlock;
+    public static Block bottledSunshine;
 
     public static void init() {
-        testBlock = new TestBlock();
+        bottledSunshine = new BlockBottledSunshine();
     }
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        event.getRegistry().register(testBlock);
+        event.getRegistry().register(bottledSunshine);
     }
 
     @SubscribeEvent
     public static void registerItemBlocks(RegistryEvent.Register<Item> event) {
-        event.getRegistry().register(new ItemBlock(testBlock).setRegistryName(testBlock.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(bottledSunshine).setRegistryName(bottledSunshine.getRegistryName()));
     }
 
     @SubscribeEvent
     public static void registerRenders(ModelRegistryEvent event) {
-        registerRender(Item.getItemFromBlock(testBlock));
+        registerRender(Item.getItemFromBlock(bottledSunshine));
     }
 
     public static void registerRender(Item item) {

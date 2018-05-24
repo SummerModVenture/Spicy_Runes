@@ -8,30 +8,29 @@ import jdk.internal.org.objectweb.asm.tree.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.io.*;
 import java.util.Random;
 
 /**
  * Created by Spencer on 5/22/18.
  */
+
+//TODO add different types of patches, add ability to create new methods, replace methods, duplicate methods, rename methods
 public class MethodPatcher implements IClassTransformer{
     private static ArrayList<Patch> patches = new ArrayList<Patch>();//IBlockState
     static {
-        System.out.println(net.minecraftforge.fml.common.ModContainer.class.getCanonicalName());
         try {
             /*Method m = World.class.getMethod("canSeeSky", BlockPos.class);
             Method c = WorldPatches.class.getMethod("seeSkyCondition", BlockPos.class);
             addPatch(m, c, c);*///quantityDroppedsee
             Method c = WorldPatches.class.getMethod("isOpaqueCube", Object.class, IBlockState.class, int.class, Random.class);
             Method s = WorldPatches.class.getMethod("seeSkyCondition", Object.class, BlockPos.class);
+            Method b = WorldPatches.class.getMethod("seeBottle", Object.class, BlockPos.class);
             Method r = WorldPatches.class.getMethod("quantityDropped", Object.class, IBlockState.class, int.class, Random.class);
             addPatch("net.minecraft.block.Block", "quantityDropped", c, r);
-            addPatch("net.minecraft.world.World", "canSeeSky", s, s);
+            addPatch("net.minecraft.world.World", "canSeeSky", b, s);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -155,7 +154,7 @@ public class MethodPatcher implements IClassTransformer{
         //System.out.println(name);
         boolean wasPatched = false;
         for(Patch p : patches){
-            if(p.matches(transformedName)){
+            if(p.matchesClass(transformedName)){
                 System.out.println("YAY");
                 for (MethodNode method : classNode.methods) {
                     if(method.name.equals(p.m) && method.desc.equals(DescriptorEncoder.encodeMethodHeader(p.ret, 1))){
@@ -173,18 +172,6 @@ public class MethodPatcher implements IClassTransformer{
         ClassWriter cw = new ClassWriter(cr, 0);
         //ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         classNode.accept(cw);
-        if(wasPatched){
-            File f = new File("patched.class");
-            try {
-                f.createNewFile();
-                FileOutputStream fos = new FileOutputStream(f);
-                fos.write(cw.toByteArray());
-                fos.flush();
-                fos.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
         return cw.toByteArray();
     }
 
@@ -198,7 +185,7 @@ public class MethodPatcher implements IClassTransformer{
             ret = rt;
         }
 
-        public boolean matches(String name){
+        public boolean matchesClass(String name){
             return c.equals(name);
         }
     }

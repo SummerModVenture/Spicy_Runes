@@ -63,7 +63,6 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     //compileOnly files("/Users/Spencer/Downloads/Common/build/classes/artifacts/spicycore_dev.jar")
     compile project(":core")
-    compile project(":ASMHelper")
     compile group: 'org.ow2.asm', name: 'asm', version: '5.0.3'
 }
 

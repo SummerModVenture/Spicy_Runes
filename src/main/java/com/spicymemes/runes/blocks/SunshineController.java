@@ -3,19 +3,34 @@ package com.spicymemes.runes.blocks;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Spencer on 5/23/18.
  */
 public class SunshineController {
-    private static ArrayList<BlockPos> positions = new ArrayList<BlockPos>();
-    public static void addBottle(BlockPos pos){
+
+    private static HashMap<Integer, SunshineController> controllers = new HashMap<Integer, SunshineController>();
+
+    private SunshineController(){
+
+    }
+
+    public static SunshineController getController(int dimensionID){
+        if(!controllers.containsKey(dimensionID)){
+            controllers.put(dimensionID, new SunshineController());
+        }
+        return controllers.get(dimensionID);
+    }
+
+    private ArrayList<BlockPos> positions = new ArrayList<BlockPos>();
+    public void addBottle(BlockPos pos){
         System.out.println("Added bottle at " + pos);
         if(!positions.contains(pos))
             positions.add(pos);
     }
 
-    public static void removeBottle(BlockPos pos){
+    public void removeBottle(BlockPos pos){
         for(int i = 0; i < positions.size(); i++){
             if(positions.get(i).equals(pos)){
                 int diff = positions.size();
@@ -27,7 +42,7 @@ public class SunshineController {
         }
     }
 
-    public static boolean inBottleRange(BlockPos p){
+    public boolean inBottleRange(BlockPos p){
         for(int i = 0; i < positions.size(); i++){
             if(p.distanceSq(positions.get(i)) < 5 * 5){
                 return true;

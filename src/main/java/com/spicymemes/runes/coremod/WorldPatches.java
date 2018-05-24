@@ -1,9 +1,11 @@
 package com.spicymemes.runes.coremod;
 
 import com.spicymemes.runes.blocks.SunshineController;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockGlowstone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.Random;
 
@@ -11,22 +13,25 @@ import java.util.Random;
  * Created by Spencer on 5/22/18.
  */
 public class WorldPatches{
-    public static boolean seeSkyCondition(Object o, BlockPos pos){
 
-        //System.out.println("SPOOPY");
+    static {
+        System.out.println("LOADED");
+    }
+
+    public static boolean seeSkyCondition(World o, BlockPos pos){
         return true;
     }
 
-    public static boolean seeBottle(Object o, BlockPos pos){
-        return SunshineController.inBottleRange(pos);
+    public static boolean seeBottle(World w, BlockPos pos){
+        return SunshineController.getController(w.provider.getDimension()).inBottleRange(pos);
     }
 
-    public static boolean isOpaqueCube(Object gs, IBlockState bs, int x, Random pos){
+    public static boolean isOpaqueCube(Block gs, IBlockState bs, int x, Random pos){
         System.out.println("SPICY MEMES");
         return true;
     }
 
-    public static int quantityDropped(Object gs, IBlockState bs, int x, Random random)
+    public static int quantityDropped(Block gs, IBlockState bs, int x, Random random)
     {
         System.out.println("ALSO SPICY MEMES");
         return 32;

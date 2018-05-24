@@ -45,10 +45,10 @@ public class BlockBottledSunshine extends Block implements ITileEntityProvider{
         worldIn.getChunkFromBlockCoords(pos).markDirty();
 
         if(!worldIn.isRemote){
-            MainMod.NETWORK.sendToAll(new SunshineUpdate(pos, SunshineUpdate.Action.REMOVE));
-            SunshineController.removeBottle(pos);
+            MainMod.NETWORK.sendToAll(new SunshineUpdate(pos, worldIn.provider.getDimension(), SunshineUpdate.Action.REMOVE));
+            SunshineController.getController(worldIn.provider.getDimension()).removeBottle(pos);
+            updateLocalLighting(worldIn, pos);
         }
-        updateLocalLighting(worldIn, pos);
     }
 
     public static void updateLocalLighting(World worldIn, BlockPos pos){

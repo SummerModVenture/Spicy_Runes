@@ -15,10 +15,12 @@ public class SunshineUpdate implements IMessage{
 
     private BlockPos p;
     private Action a;
+    private int d;
 
-    public SunshineUpdate(BlockPos pos, Action action){
+    public SunshineUpdate(BlockPos pos, int dim, Action action){
         this.p = pos;
         this.a = action;
+        this.d = dim;
     }
 
     public SunshineUpdate(){
@@ -28,12 +30,14 @@ public class SunshineUpdate implements IMessage{
     public void fromBytes(ByteBuf buf) {
         this.a = Action.values()[buf.readByte()];
         this.p = BlockPos.fromLong(buf.readLong());
+        this.d = buf.readInt();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeByte(this.a.ordinal());
         buf.writeLong(this.p.toLong());
+        buf.writeInt(this.d);
     }
 
     public BlockPos getPos(){
@@ -42,5 +46,9 @@ public class SunshineUpdate implements IMessage{
 
     public Action getAction(){
         return a;
+    }
+
+    public int getDim(){
+        return d;
     }
 }

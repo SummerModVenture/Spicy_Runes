@@ -9,7 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.util.math.BlockPos;
 
-import java.lang.reflect.Method;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -21,129 +21,98 @@ import java.util.Random;
 public class MethodPatcher implements IClassTransformer{
     private static ArrayList<Patch> patches = new ArrayList<Patch>();//IBlockState
     static {
-        try {
-            /*Method m = World.class.getMethod("canSeeSky", BlockPos.class);
-            Method c = WorldPatches.class.getMethod("seeSkyCondition", BlockPos.class);
-            addPatch(m, c, c);*///quantityDroppedsee
-            Method c = WorldPatches.class.getMethod("isOpaqueCube", Object.class, IBlockState.class, int.class, Random.class);
-            Method s = WorldPatches.class.getMethod("seeSkyCondition", Object.class, BlockPos.class);
-            Method b = WorldPatches.class.getMethod("seeBottle", Object.class, BlockPos.class);
-            Method r = WorldPatches.class.getMethod("quantityDropped", Object.class, IBlockState.class, int.class, Random.class);
-            addPatch("net.minecraft.block.Block", "quantityDropped", c, r);
-            addPatch("net.minecraft.world.World", "canSeeSky", b, s);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+        addPatch("net.minecraft.block.Block.quantityDropped", "com.spicymemes.runes.coremod.WorldPatches.isOpaqueCube", "com.spicymemes.runes.coremod.WorldPatches.quantityDropped", DescriptorEncoder.encodeMethodHeader(int.class, IBlockState.class, int.class, Random.class));
+        addPatch("net.minecraft.world.World.canSeeSky", "com.spicymemes.runes.coremod.WorldPatches.seeSkyCondition", "com.spicymemes.runes.coremod.WorldPatches.seeBottle", DescriptorEncoder.encodeMethodHeader(boolean.class, BlockPos.class));
     }
-    private static InsnList genPatch(Method conditional, Method ret){
+    private static InsnList genPatch(String conditional, String ret, String desc, boolean virtual, String operatingClass){
         InsnList patch = new InsnList();
         LabelNode els = new LabelNode(new Label());
 
-        String desc = DescriptorEncoder.encodeMethodHeader(conditional);
-        String retDesc = DescriptorEncoder.encodeMethodHeader(ret);
+        loadMethodHeaderOnStack(DescriptorEncoder.getMethodArgs(desc), patch, virtual);
+        String newDesc = desc;
+        if(virtual){
+            newDesc = "(L" + operatingClass.replace('.', '/') + ";" + newDesc.substring(1);
+        }
+        System.out.println("newDesc: " + newDesc);
+        patch.add(new MethodInsnNode(Opcodes.INVOKESTATIC, conditional.replace('.', '/').substring(0, conditional.lastIndexOf('.')), conditional.substring(conditional.lastIndexOf('.') + 1), newDesc.substring(0, newDesc.indexOf(')') + 1) + "Z", false));
 
-        loadMethodHeaderOnStack(conditional, patch);
-        patch.add(new MethodInsnNode(Opcodes.INVOKESTATIC, conditional.getDeclaringClass().getCanonicalName().replace('.', '/'), conditional.getName(), desc, false));
-
-
-        Object[] ls = getStackArray(ret.getParameterTypes());
-        Object[] ss = getStackArray(new Class[]{ret.getReturnType()});
-        //patch.add(new FrameNode(Opcodes.F_NEW, ls.length, ls, ss.length, ss));
 
         patch.add(new JumpInsnNode(Opcodes.IFEQ, els));
 
-        loadMethodHeaderOnStack(conditional, patch);
-        patch.add(new MethodInsnNode(Opcodes.INVOKESTATIC, ret.getDeclaringClass().getCanonicalName().replace('.', '/'), ret.getName(), retDesc, false));
-        Class rt = ret.getReturnType();
+        loadMethodHeaderOnStack(DescriptorEncoder.getMethodArgs(desc), patch, virtual);
+        patch.add(new MethodInsnNode(Opcodes.INVOKESTATIC, ret.replace('.', '/').substring(0, ret.lastIndexOf('.')), ret.substring(ret.lastIndexOf('.') + 1), newDesc, false));
+        char rt = DescriptorEncoder.getMethodRet(desc);
         for(int i = 0; i < 1; i++) {
-            if (rt == int.class || rt == byte.class || rt == boolean.class || rt == short.class || rt == char.class) {
+            if (rt == 'I' || rt == 'B' || rt == 'Z' || rt == 'S' || rt == 'C') {
                 patch.add(new InsnNode(Opcodes.IRETURN));
-            } else if (rt == float.class) {
+            } else if (rt == 'F') {
                 patch.add(new InsnNode(Opcodes.FRETURN));
-            } else if (rt == void.class) {
+            } else if (rt == 'V') {
                 patch.add(new InsnNode(Opcodes.RETURN));
-            } else if (rt == long.class) {
+            } else if (rt == 'J') {
                 patch.add(new InsnNode(Opcodes.LRETURN));
-            } else if (rt == double.class) {
+            } else if (rt == 'D') {
                 patch.add(new InsnNode(Opcodes.DRETURN));
             } else {
                 patch.add(new InsnNode(Opcodes.ARETURN));
             }
         }
-        patch.add(new FrameNode(Opcodes.F_SAME, ls.length, ls, ss.length, ss));
+        patch.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
         patch.add(els);
-        //System.out.println(Arrays.toString(patch.toArray()));
         return patch;
     }
 
-    private static Object[] getStackArray(Class[] types){
-        if(types.length == 1 && types[0] == void.class){
-            return new Object[0];
+    private static void loadMethodHeaderOnStack(char[] m, InsnList l, boolean virtual){
+        if(virtual){
+            l.add(new VarInsnNode(Opcodes.ALOAD, 0));
         }
-        Object[] o = new Object[types.length];
-        for(int i = 0; i < o.length; i++){
-            Class type = types[i];
-            if(type == int.class || type == byte.class || type == boolean.class || type == short.class || type == char.class){
-                o[i] = Opcodes.INTEGER;
-            }
-            else if(type == float.class){
-                o[i] = Opcodes.FLOAT;
-            }
-            else if(type == long.class){
-                o[i] = Opcodes.LONG;
-            }
-            else if(type == double.class){
-                o[i] = Opcodes.DOUBLE;
-            }
-            else{
-                o[i] = type.getCanonicalName().replace('.', '/');
-            }
-        }
-        return o;
-    }
-
-    private static void loadMethodHeaderOnStack(Method m, InsnList l){
-        Class[] c = m.getParameterTypes();
-        for(int i = 0; i < m.getParameterCount(); i++){
-            int opcode = -1;
-            if(c[i].equals(int.class)){
+        int off = virtual ? 1 : 0;
+        for(int i = 0; i < m.length; i++){
+            int opcode;
+            char c = m[i];
+            if(c == 'I'){
                 opcode = Opcodes.ILOAD;
             }
-            else if(c[i].equals(boolean.class)){
+            else if(c == 'Z'){
                 opcode = Opcodes.ILOAD;
             }
-            else if(c[i].equals(char.class)){
+            else if(c == 'C'){
                 opcode = Opcodes.ILOAD;
             }
-            else if(c[i].equals(short.class)){
+            else if(c == 'S'){
                 opcode = Opcodes.ILOAD;
             }
-            else if(c[i].equals(float.class)){
+            else if(c == 'F'){
                 opcode = Opcodes.FLOAD;
             }
-            else if(c[i].equals(double.class)){
+            else if(c == 'D'){
                 opcode = Opcodes.DLOAD;
             }
-            else if(c[i].equals(long.class)){
+            else if(c == 'J'){
                 opcode = Opcodes.LLOAD;
             }
-            else if(c[i].equals(byte.class)){
+            else if(c == 'B'){
                 opcode = Opcodes.FLOAD;
             }
             else {
                 opcode = Opcodes.ALOAD;
             }
-            l.add(new VarInsnNode(opcode, i));
+            l.add(new VarInsnNode(opcode, i + off));
         }
     }
 
-    public static void patchBefore(MethodNode toPatch, Method condition, Method ret){
-        toPatch.instructions.insert(genPatch(condition, ret));
+    public static void patchBefore(MethodNode toPatch, String condition, String ret, String patchClass){
+        System.out.println(toPatch);
+        System.out.println(toPatch.parameters);
+        System.out.println(toPatch.desc);
+
+        System.out.println(toPatch.access & Opcodes.ACC_STATIC);
+        toPatch.instructions.insert(genPatch(condition, ret, toPatch.desc, (toPatch.access & Opcodes.ACC_STATIC) == 0, patchClass));
     }
 
-    private static void addPatch(String cn, String mn, Method cond, Method ret){
-        patches.add(new Patch(cn, mn, cond, ret));
-        System.out.println("Adding patch for class " + cn + "." + mn);
+    private static void addPatch(String toPatch, String cond, String ret, String desc){
+        patches.add(new Patch(toPatch, cond, ret, desc));
+        System.out.println("Adding patch for class " + toPatch);
     }
 
     @Override
@@ -157,12 +126,10 @@ public class MethodPatcher implements IClassTransformer{
             if(p.matchesClass(transformedName)){
                 System.out.println("YAY");
                 for (MethodNode method : classNode.methods) {
-                    if(method.name.equals(p.m) && method.desc.equals(DescriptorEncoder.encodeMethodHeader(p.ret, 1))){
+                    if(p.matchesFunction(method)){
                         System.out.println("YAY!!!");
                         System.out.println(name);
-                        System.out.println(method.desc);
-                        System.out.println(DescriptorEncoder.encodeMethodHeader(p.ret, 1));
-                        patchBefore(method, p.cond, p.ret);
+                        patchBefore(method, p.condition, p.ret, transformedName);
                         wasPatched = true;
                     }
                     //System.out.println(method.name);
@@ -170,23 +137,42 @@ public class MethodPatcher implements IClassTransformer{
             }
         }
         ClassWriter cw = new ClassWriter(cr, 0);
-        //ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         classNode.accept(cw);
+        //ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        if(wasPatched){
+            File f = new File("patched.class");
+            try {
+                FileOutputStream fos = new FileOutputStream(f);
+                fos.write(cw.toByteArray());
+                fos.flush();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return cw.toByteArray();
     }
 
     private static class Patch{
-        public final Method cond, ret;
-        String c, m;
-        public Patch(String cn, String mn, Method cd, Method rt){
-            c = cn;
-            m = mn;
-            cond = cd;
+        String toPatch, condition, ret, des;
+        public Patch(String tp, String cd, String rt, String desc){
+            toPatch = tp;
+            condition = cd;
             ret = rt;
+            des = desc;
         }
 
         public boolean matchesClass(String name){
-            return c.equals(name);
+            return name.equals(toPatch.substring(0, toPatch.lastIndexOf('.')));
+        }
+
+        public boolean matchesFunction(MethodNode m){
+            if(m.name.equals(toPatch.substring(toPatch.lastIndexOf('.') + 1))){
+                if(des == null || des.equals(m.desc)){
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

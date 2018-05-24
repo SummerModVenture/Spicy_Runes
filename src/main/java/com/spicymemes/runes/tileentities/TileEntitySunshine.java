@@ -19,8 +19,8 @@ public class TileEntitySunshine extends TileEntity implements ITickable{
     public void onChunkUnload()
     {
         if(!this.world.isRemote){
-            SunshineController.removeBottle(this.getPos());
-            MainMod.NETWORK.sendToAll(new SunshineUpdate(pos, SunshineUpdate.Action.REMOVE));
+            SunshineController.getController(world.provider.getDimension()).removeBottle(this.getPos());
+            MainMod.NETWORK.sendToAll(new SunshineUpdate(pos, world.provider.getDimension(), SunshineUpdate.Action.REMOVE));
             BlockBottledSunshine.updateLocalLighting(this.world, this.pos);
         }
     }
@@ -28,8 +28,8 @@ public class TileEntitySunshine extends TileEntity implements ITickable{
     public void onLoad()
     {
         if(!this.world.isRemote){
-            SunshineController.addBottle(this.getPos());
-            MainMod.NETWORK.sendToAll(new SunshineUpdate(pos, SunshineUpdate.Action.ADD));
+            SunshineController.getController(world.provider.getDimension()).addBottle(this.getPos());
+            MainMod.NETWORK.sendToAll(new SunshineUpdate(pos, world.provider.getDimension(), SunshineUpdate.Action.ADD));
             BlockBottledSunshine.updateLocalLighting(this.world, this.pos);
         }
     }

@@ -39,9 +39,9 @@ public class SunshineClientUpdater implements IMessageHandler<SunshineUpdate, IM
         }*/
         switch (message.getAction()){
             case ADD:
-                SunshineController.addBottle(message.getPos()); break;
+                SunshineController.getController(message.getDim()).addBottle(message.getPos()); break;
             case REMOVE:
-                SunshineController.removeBottle(message.getPos()); break;
+                SunshineController.getController(message.getDim()).removeBottle(message.getPos()); break;
         }
         updates.add(message);
         //BlockBottledSunshine.updateLocalLighting(Minecraft.getMinecraft().world, message.getPos());
@@ -54,7 +54,8 @@ public class SunshineClientUpdater implements IMessageHandler<SunshineUpdate, IM
         if (event.phase == TickEvent.Phase.START) {
             while(updates.size() > 0){
                 SunshineUpdate up = updates.remove(0);
-                BlockBottledSunshine.updateLocalLighting(Minecraft.getMinecraft().world, up.getPos());
+                if(up.getDim() == Minecraft.getMinecraft().world.provider.getDimension())
+                    BlockBottledSunshine.updateLocalLighting(Minecraft.getMinecraft().world, up.getPos());
             }
         }
     }

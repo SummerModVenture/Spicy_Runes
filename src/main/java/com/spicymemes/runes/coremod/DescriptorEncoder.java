@@ -1,6 +1,8 @@
 package com.spicymemes.runes.coremod;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class DescriptorEncoder {
 	private static final HashMap<Class<?>, String> primitives = new HashMap<Class<?>, String>();
@@ -15,7 +17,37 @@ public class DescriptorEncoder {
 		primitives.put(boolean.class, "Z");
 		primitives.put(void.class, "V");
 	}
-	
+
+	public static char[] getMethodArgs(String s){
+		ArrayList<Character> out = new ArrayList<>();
+		int start = 1;
+		while(s.charAt(start) != ')'){
+			switch (s.charAt(start)){
+				case 'L':case '[':
+					out.add('O');
+					while(s.charAt(start) != ';'){
+						start++;
+					} break;
+				default: out.add(s.charAt(start));
+			}
+			start++;
+		}
+		Object[] o = out.toArray();
+		char[] outChars = new char[o.length];
+		for(int i = 0; i < o.length; i++){
+			outChars[i] = (char)o[i];
+		}
+		return outChars;
+	}
+
+	public static char getMethodRet(String s){
+		char out = s.charAt(s.lastIndexOf(')') + 1);
+		if(out == 'L' || out == '['){
+			out = 'O';
+		}
+		return out;
+	}
+
 	public static String encodeType(Class<?> c) {
 		if(primitives.containsKey(c)) {
 			return primitives.get(c);

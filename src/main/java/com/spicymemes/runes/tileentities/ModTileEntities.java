@@ -8,5 +8,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModTileEntities {
     public static void init(){
         GameRegistry.registerTileEntity(TileEntitySunshine.class, "bottled_sunshine");
+        GameRegistry.registerTileEntity(TileEntitySunstoneBricks.class, "sunstone_bricks");
     }
 }

@@ -17,7 +17,7 @@ public class CoreMod implements IFMLLoadingPlugin {
 
     @Override
     public String getModContainerClass() {
-        return null;//Container.class.getName();
+        return null;
     }
 
     @Nullable

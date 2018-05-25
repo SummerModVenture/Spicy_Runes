@@ -85,14 +85,24 @@ public class DescriptorEncoder {
 		return (f.getDeclaringClass().getName() + "/" + f.getName()).replaceAll("\\.", "/") + encodeMethodHeader(f);
 	}
 	
-	public static String encodeMethodHeader(Class<?> ret, Class<?> ... args) {
+	public static String encodeMethodHeader(Object ret, Object ... args) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("(");
-		for(Class<?> c : args) {
-			sb.append(encodeType(c));
+		for(Object c : args) {
+			if(c instanceof Class){
+				sb.append(encodeType((Class)c));
+			}
+			else if(c instanceof String){
+				sb.append("L" + ((String)c).replaceAll("\\.", "/") + ";");
+			}
 		}
 		sb.append(")");
-		sb.append(encodeType(ret));
+		if(ret instanceof Class){
+			sb.append(encodeType((Class)ret));
+		}
+		else if(ret instanceof String){
+			sb.append("L" + ((String)ret).replaceAll("\\.", "/") + ";");
+		}
 		return sb.toString();
 	}
 }

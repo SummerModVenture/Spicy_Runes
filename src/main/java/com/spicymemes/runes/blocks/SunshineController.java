@@ -44,7 +44,7 @@ public class SunshineController {
 
     public boolean inBottleRange(BlockPos p){
         for(int i = 0; i < positions.size(); i++){
-            if(p.distanceSq(positions.get(i)) < 5 * 5){
+            if(p.distanceSq(positions.get(i)) < BlockBottledSunshine.R2){
                 return true;
             }
         }

@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "spicyrunes:blocks/bottledsunshine"
+    "all": "spicyrunes:blocks/sunstone_bricks"
   }
 }

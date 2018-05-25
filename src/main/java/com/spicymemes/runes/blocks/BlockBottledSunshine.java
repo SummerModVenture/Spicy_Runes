@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -30,6 +31,9 @@ import java.util.Random;
  * Created by Spencer on 5/22/18.
  */
 public class BlockBottledSunshine extends Block implements ITileEntityProvider{
+
+    public static final int RADIUS = 5;
+    public static final int R2 = RADIUS * RADIUS;
 
     public BlockBottledSunshine() {
         super(Material.ROCK, MapColor.EMERALD);
@@ -52,9 +56,9 @@ public class BlockBottledSunshine extends Block implements ITileEntityProvider{
     }
 
     public static void updateLocalLighting(World worldIn, BlockPos pos){
-        for(int i = -5; i <= 5; i++){
-            for(int j = -5; j <= 5; j++){
-                for(int k = -5; k <= 5; k++){
+        for(int i = -RADIUS; i <= RADIUS; i++){
+            for(int j = -RADIUS; j <= RADIUS; j++){
+                for(int k = -RADIUS; k <= RADIUS; k++){
                     BlockPos p = new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
                     worldIn.checkLight(p);
                 }
@@ -68,16 +72,6 @@ public class BlockBottledSunshine extends Block implements ITileEntityProvider{
     {
         return false;
     }
-
-    /*@SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
-    {
-        double d0 = (double)pos.getX() + 0.5D;
-        double d1 = (double)pos.getY() + 0.3D;
-        double d2 = (double)pos.getZ() + 0.5D;
-
-        Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBottledSunshine(worldIn, d0, d1, d2));
-    }*/
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {

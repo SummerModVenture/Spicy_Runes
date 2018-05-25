@@ -4,8 +4,10 @@ import com.spicymemes.runes.MainMod;
 import com.spicymemes.runes.blocks.BlockBottledSunshine;
 import com.spicymemes.runes.blocks.SunshineController;
 import com.spicymemes.runes.client.ParticleBottledSunshine;
+import com.spicymemes.runes.client.ParticleSunburst;
 import com.spicymemes.runes.network.SunshineUpdate;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 
@@ -23,6 +25,7 @@ public class TileEntitySunshine extends TileEntity implements ITickable{
             MainMod.NETWORK.sendToAll(new SunshineUpdate(pos, world.provider.getDimension(), SunshineUpdate.Action.REMOVE));
             BlockBottledSunshine.updateLocalLighting(this.world, this.pos);
         }
+
     }
     @Override
     public void onLoad()
@@ -34,19 +37,33 @@ public class TileEntitySunshine extends TileEntity implements ITickable{
         }
     }
     private int tickCount = 3;
+    private int burstTickCount = 0;
     private static final Random r = new Random();
+    private boolean wasInRangeLastTick = false;
     @Override
     public void update() {
 
         if(world.isRemote){
             tickCount--;
+            double d0 = (double)pos.getX() + 0.5D;
+            double d1 = (double)pos.getY() + 0.3D;
+            double d2 = (double)pos.getZ() + 0.5D;
+            if(burstTickCount % 20 == 0){
+                //Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSunburst(this.world, d0, d1, d2));
+            }
+            burstTickCount++;
             if(tickCount == 0){
-                double d0 = (double)pos.getX() + 0.5D;
-                double d1 = (double)pos.getY() + 0.3D;
-                double d2 = (double)pos.getZ() + 0.5D;
-
                 Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBottledSunshine(this.world, d0, d1, d2));
                 tickCount = 2 + r.nextInt(3);
+            }
+            if(Minecraft.getMinecraft().player.getPosition().distanceSq(this.pos) < 100){
+                if(!wasInRangeLastTick){
+                    Minecraft.getMinecraft().ingameGUI.displayTitle("Altar of the sun", null, 10, 20, 10);
+                }
+                wasInRangeLastTick = true;
+            }
+            else{
+                wasInRangeLastTick = false;
             }
         }
     }

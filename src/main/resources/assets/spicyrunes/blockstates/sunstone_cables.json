@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=up,powered=true":  { "model": "spicyrunes:sunstone_cables" },
+    "facing=north,powered=true":   { "model": "spicyrunes:sunstone_cables", "x": 90 },
+    "facing=west,powered=true":   { "model": "spicyrunes:sunstone_cables", "x": 270, "y": 90 },
+    "facing=down,powered=true":  { "model": "spicyrunes:sunstone_cables" , "y": 180},
+    "facing=south,powered=true":   { "model": "spicyrunes:sunstone_cables", "x": 270 },
+    "facing=east,powered=true":   { "model": "spicyrunes:sunstone_cables", "x": 270, "y": 270 },
+    "facing=up,powered=false":  { "model": "spicyrunes:sunstone_cables_off" },
+    "facing=north,powered=false":   { "model": "spicyrunes:sunstone_cables_off", "x": 90 },
+    "facing=west,powered=false":   { "model": "spicyrunes:sunstone_cables_off", "x": 270, "y": 90 },
+    "facing=down,powered=false":  { "model": "spicyrunes:sunstone_cables_off" , "y": 180},
+    "facing=south,powered=false":   { "model": "spicyrunes:sunstone_cables_off", "x": 270 },
+    "facing=east,powered=false":   { "model": "spicyrunes:sunstone_cables_off", "x": 270, "y": 270 }
+  }
+}

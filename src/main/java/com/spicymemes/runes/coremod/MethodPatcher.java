@@ -25,7 +25,7 @@ public class MethodPatcher implements IClassTransformer{
     static {
         addPatch("net.minecraft.block.Block.quantityDropped", "com.spicymemes.runes.coremod.WorldPatches.isOpaqueCube", "com.spicymemes.runes.coremod.WorldPatches.quantityDropped", DescriptorEncoder.encodeMethodHeader(int.class, IBlockState.class, int.class, Random.class));
         addPatch("net.minecraft.world.World.canSeeSky", "com.spicymemes.runes.coremod.WorldPatches.seeBottle", "com.spicymemes.runes.coremod.WorldPatches.seeSkyCondition", DescriptorEncoder.encodeMethodHeader(boolean.class, BlockPos.class));
-        addPatch("net.minecraft.block.BlockFarmland.hasWater", "com.spicymemes.runes.coremod.WorldPatches.hasWaterCondition", "com.spicymemes.runes.coremod.WorldPatches.hasWater", DescriptorEncoder.encodeMethodHeader(boolean.class, "net.minecraft.world.World", BlockPos.class));
+        //addPatch("net.minecraft.block.BlockFarmland.hasWater", "com.spicymemes.runes.coremod.WorldPatches.hasWaterCondition", "com.spicymemes.runes.coremod.WorldPatches.hasWater", DescriptorEncoder.encodeMethodHeader(boolean.class, "net.minecraft.world.World", BlockPos.class));
     }
     private static InsnList genPatch(String conditional, String ret, String desc, boolean virtual, String operatingClass){
         InsnList patch = new InsnList();
@@ -241,6 +241,10 @@ public class MethodPatcher implements IClassTransformer{
                 }
             }
             return false;
+        }
+
+        public void patch(){
+
         }
     }
 

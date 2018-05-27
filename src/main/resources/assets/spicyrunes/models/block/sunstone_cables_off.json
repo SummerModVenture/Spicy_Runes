@@ -1,0 +1,22 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "block": "spicyrunes:blocks/sunstone_cables",
+    "cap": "spicyrunes:blocks/sunstone_cables_top",
+    "overlay": "spicyrunes:blocks/cable_animation"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "tintindex": 0, "texture": "#cap", "cullface": "down" },
+        "up":    { "tintindex": 0, "texture": "#cap", "cullface": "up" },
+        "north": { "tintindex": 0, "texture": "#block", "cullface": "north" },
+        "south": { "tintindex": 0, "texture": "#block", "cullface": "south" },
+        "west":  { "tintindex": 0, "texture": "#block", "cullface": "west" },
+        "east":  { "tintindex": 0, "texture": "#block", "cullface": "east" }
+      }
+    }
+  ]
+}

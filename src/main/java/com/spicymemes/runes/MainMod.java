@@ -1,6 +1,7 @@
 package com.spicymemes.runes;
 
 import com.spicymemes.runes.blocks.ModBlocks;
+import com.spicymemes.runes.items.ModItems;
 import com.spicymemes.runes.tileentities.ModTileEntities;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Mod;
@@ -39,8 +40,8 @@ public class MainMod
             e.printStackTrace();
         }*/
         ModBlocks.init();
+        ModItems.init();
         ModTileEntities.init();
-        proxy.init();
         logger = event.getModLog();
     }
 
@@ -48,6 +49,7 @@ public class MainMod
     public void init(FMLInitializationEvent event)
     {
         // some example code
+        proxy.init();
         logger.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
     }
 }

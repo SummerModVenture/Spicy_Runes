@@ -20,6 +20,6 @@ void main(){
     //vec3 N = gl_Normal.xyz;
 
     normal = //gl_ModelViewMatrix * vec4(N, 0.0);
-       //vec4(gl_NormalMatrix * gl_Normal, 0.0);
-       vec4(gl_Normal, 0.0);
+       vec4(gl_NormalMatrix * gl_Normal, 0.0);
+       //vec4(gl_Normal, 0.0);
 }

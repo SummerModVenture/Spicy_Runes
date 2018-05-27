@@ -1,0 +1,9 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "spicyrunes:items/tools/sunstone/pickaxe/handle",
+        "layer1": "spicyrunes:items/tools/sunstone/pickaxe/front",
+        "layer2": "spicyrunes:items/tools/sunstone/pickaxe/mid",
+        "layer3": "spicyrunes:items/tools/sunstone/pickaxe/back"
+    }
+}

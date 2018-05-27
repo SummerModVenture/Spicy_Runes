@@ -39,7 +39,6 @@ public class TileEntitySunshine extends TileEntity implements ITickable{
     private int tickCount = 3;
     private int burstTickCount = 0;
     private static final Random r = new Random();
-    private boolean wasInRangeLastTick = false;
     @Override
     public void update() {
 
@@ -55,15 +54,6 @@ public class TileEntitySunshine extends TileEntity implements ITickable{
             if(tickCount == 0){
                 Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBottledSunshine(this.world, d0, d1, d2));
                 tickCount = 2 + r.nextInt(3);
-            }
-            if(Minecraft.getMinecraft().player.getPosition().distanceSq(this.pos) < 100){
-                if(!wasInRangeLastTick){
-                    Minecraft.getMinecraft().ingameGUI.displayTitle("Altar of the sun", null, 10, 20, 10);
-                }
-                wasInRangeLastTick = true;
-            }
-            else{
-                wasInRangeLastTick = false;
             }
         }
     }

@@ -144,6 +144,7 @@ public class SunstoneBricksTESR extends TileEntitySpecialRenderer<TileEntitySuns
     private void updateSunLoc(){
         World w = Minecraft.getMinecraft().world;
         if(w != null){
+            Minecraft.getMinecraft().player.getLookVec();
             float ang = (float) ((w.getCelestialAngle(0) + 0.25f) * 2 * Math.PI);
             GL20.glUniform3f(sunLoc, (float)Math.cos(ang), (float)Math.sin(ang), 0);
         }

@@ -1,0 +1,8 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "spicyrunes:items/tools/sunstone/sword/handle",
+        "layer1": "spicyrunes:items/tools/sunstone/sword/shaft",
+        "layer2": "spicyrunes:items/tools/sunstone/sword/tip"
+    }
+}

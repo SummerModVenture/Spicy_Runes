@@ -9,5 +9,6 @@ public class ModTileEntities {
     public static void init(){
         GameRegistry.registerTileEntity(TileEntitySunshine.class, "bottled_sunshine");
         GameRegistry.registerTileEntity(TileEntitySunstoneBricks.class, "sunstone_bricks");
+        GameRegistry.registerTileEntity(TileEntitySunPedestal.class, "sun_pedestal");
     }
 }

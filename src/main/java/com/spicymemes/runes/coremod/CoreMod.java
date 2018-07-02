@@ -11,7 +11,6 @@ import java.util.Map;
 public class CoreMod implements IFMLLoadingPlugin {
     @Override
     public String[] getASMTransformerClass() {
-        System.out.println("test");
         return new String[]{MethodPatcher.class.getName()};
     }
 

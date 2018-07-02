@@ -11,11 +11,15 @@ buildscript {
 apply plugin: 'java'
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
-    options.compilerArgs << '-XDignore.symbol.file=true'
+    options.fork = true
+    options.forkOptions.executable = "javac"
+    options.compilerArgs << '-XDignore.symbol.file'
+    println 'compileJava called'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+
 
 
 version = "1.0"
@@ -35,6 +39,7 @@ jar {
 minecraft {
     version = "1.12.2-14.23.3.2655"
     runDir = "run"
+    println 'minecraft called'
     
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
@@ -67,8 +72,8 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     //compileOnly files("/Users/Spencer/Downloads/Common/build/classes/artifacts/spicycore_dev.jar")
-    compile project(":core")
-    compile group: 'org.ow2.asm', name: 'asm', version: '5.0.3'
+    //compile project(":core")
+    //compile group: 'org.ow2.asm', name: 'asm', version: '5.0.3'
     //println 'doing dependencies'
 }
 

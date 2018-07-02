@@ -3,19 +3,18 @@ package com.spicymemes.runes.items.tools.sunstone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-
-import java.util.Arrays;
 
 /**
  * Created by Spencer on 5/27/18.
  */
-public class SunstoneAxe extends ItemAxe{
-    public SunstoneAxe() {
+public class SunstoneHoe extends ItemHoe {
+    public SunstoneHoe() {
         super(ToolMaterial.IRON);
-        this.setRegistryName("sunstone_axe");
-        this.setUnlocalizedName("sunstone_axe");
+        this.setRegistryName("sunstone_hoe");
+        this.setUnlocalizedName("sunstone_hoe");
         setCreativeTab(CreativeTabs.TOOLS);
     }
 

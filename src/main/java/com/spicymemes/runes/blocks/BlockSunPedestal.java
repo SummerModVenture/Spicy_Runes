@@ -51,7 +51,7 @@ public class BlockSunPedestal extends Block implements ITileEntityProvider{
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
         ((TileEntitySunPedestal)worldIn.getTileEntity(pos)).attemptRitual();
-        return false;
+        return ((TileEntitySunPedestal)worldIn.getTileEntity(pos)).shouldRitualContinue();
     }
 
     @Override

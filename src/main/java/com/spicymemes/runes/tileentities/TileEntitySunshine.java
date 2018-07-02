@@ -10,6 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -43,18 +45,23 @@ public class TileEntitySunshine extends TileEntity implements ITickable{
     public void update() {
 
         if(world.isRemote){
-            tickCount--;
-            double d0 = (double)pos.getX() + 0.5D;
-            double d1 = (double)pos.getY() + 0.3D;
-            double d2 = (double)pos.getZ() + 0.5D;
-            if(burstTickCount % 20 == 0){
-                //Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSunburst(this.world, d0, d1, d2));
-            }
-            burstTickCount++;
-            if(tickCount == 0){
-                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBottledSunshine(this.world, d0, d1, d2));
-                tickCount = 2 + r.nextInt(3);
-            }
+            tickParticles();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void tickParticles(){
+        tickCount--;
+        double d0 = (double)pos.getX() + 0.5D;
+        double d1 = (double)pos.getY() + 0.3D;
+        double d2 = (double)pos.getZ() + 0.5D;
+        if(burstTickCount % 20 == 0){
+            //Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSunburst(this.world, d0, d1, d2));
+        }
+        burstTickCount++;
+        if(tickCount == 0){
+            Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBottledSunshine(this.world, d0, d1, d2));
+            tickCount = 2 + r.nextInt(3);
         }
     }
 }

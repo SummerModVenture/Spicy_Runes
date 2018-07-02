@@ -5,6 +5,6 @@ package com.spicymemes.runes;
  */
 public class CommonProxy {
     public void init(){
-
+        
     }
 }

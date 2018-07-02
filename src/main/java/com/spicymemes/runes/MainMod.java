@@ -13,9 +13,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-
 @Mod(modid = MainMod.MODID, name = MainMod.NAME, version = MainMod.VERSION, dependencies = "required-after:spicycore@[1.0,)")
 public class MainMod
 {

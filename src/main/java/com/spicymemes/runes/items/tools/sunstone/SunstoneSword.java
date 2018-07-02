@@ -2,24 +2,23 @@ package com.spicymemes.runes.items.tools.sunstone;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemAxe;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.NonNullList;
-
-import java.util.Arrays;
 
 /**
  * Created by Spencer on 5/27/18.
  */
-public class SunstoneAxe extends ItemAxe{
-    public SunstoneAxe() {
+public class SunstoneSword extends ItemSword {
+    public SunstoneSword() {
         super(ToolMaterial.IRON);
-        this.setRegistryName("sunstone_axe");
-        this.setUnlocalizedName("sunstone_axe");
+        this.setRegistryName("sunstone_sword");
+        this.setUnlocalizedName("sunstone_sword");
         setCreativeTab(CreativeTabs.TOOLS);
     }
-
-    private String toolClass;
 
     @javax.annotation.Nullable
     @Override

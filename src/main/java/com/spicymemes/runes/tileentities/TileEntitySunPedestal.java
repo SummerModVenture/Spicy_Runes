@@ -10,6 +10,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -34,30 +36,7 @@ public class TileEntitySunPedestal extends TileEntity implements ITickable{
     @Override
     public void update() {
         if(this.world.isRemote){
-            if(this.inRitual && (RITUAL_DURATION - ritualProgress) > PARTICLE_DURATION && pastRitualProbation) {
-                if (tickCount % delay == 0) {
-                    if (Math.random() > 0.66)
-                        spawnChargeParticleWhereApplicable(this.pos.add(ALTAR_RADIUS, 1, 0));
-                    if (Math.random() > 0.66)
-                        spawnChargeParticleWhereApplicable(this.pos.add(-ALTAR_RADIUS, 1, 0));
-                    if (Math.random() > 0.66)
-                        spawnChargeParticleWhereApplicable(this.pos.add(0, 1, ALTAR_RADIUS));
-                    if (Math.random() > 0.66)
-                        spawnChargeParticleWhereApplicable(this.pos.add(0, 1, -ALTAR_RADIUS));
-                }
-                tickCount++;
-            }
-
-
-            if(Minecraft.getMinecraft().player.getPosition().distanceSq(this.pos) < 100){
-                if(!wasInRangeLastTick){
-                    Minecraft.getMinecraft().ingameGUI.displayTitle("Altar of the Sun", null, 10, 20, 10);
-                }
-                wasInRangeLastTick = true;
-            }
-            else{
-                wasInRangeLastTick = false;
-            }
+            updateClient();
         }
         if(inRitual){
             if(shouldRitualContinue() || ritualProgress == 0){
@@ -74,6 +53,34 @@ public class TileEntitySunPedestal extends TileEntity implements ITickable{
             else {
                 resetRitual();
             }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void updateClient(){
+        if(this.inRitual && (RITUAL_DURATION - ritualProgress) > PARTICLE_DURATION && pastRitualProbation) {
+            if (tickCount % delay == 0) {
+                if (Math.random() > 0.66)
+                    spawnChargeParticleWhereApplicable(this.pos.add(ALTAR_RADIUS, 1, 0));
+                if (Math.random() > 0.66)
+                    spawnChargeParticleWhereApplicable(this.pos.add(-ALTAR_RADIUS, 1, 0));
+                if (Math.random() > 0.66)
+                    spawnChargeParticleWhereApplicable(this.pos.add(0, 1, ALTAR_RADIUS));
+                if (Math.random() > 0.66)
+                    spawnChargeParticleWhereApplicable(this.pos.add(0, 1, -ALTAR_RADIUS));
+            }
+            tickCount++;
+        }
+
+
+        if(Minecraft.getMinecraft().player.getPosition().distanceSq(this.pos) < 100){
+            if(!wasInRangeLastTick){
+                Minecraft.getMinecraft().ingameGUI.displayTitle("Altar of the Sun", null, 10, 20, 10);
+            }
+            wasInRangeLastTick = true;
+        }
+        else{
+            wasInRangeLastTick = false;
         }
     }
 
@@ -119,10 +126,11 @@ public class TileEntitySunPedestal extends TileEntity implements ITickable{
         this.world.neighborChanged(pos.offset(EnumFacing.DOWN), this.blockType, pos);
     }
 
-    private boolean shouldRitualContinue(){
+    public boolean shouldRitualContinue(){
         return isAltarComplete() && (this.world.getBlockState(pos.add(0, 1, 0)).getBlock() == ModBlocks.emptyBottle) && this.world.isDaytime() && !this.world.isRaining();
     }
 
+    @SideOnly(Side.CLIENT)
     private void spawnChargeParticleFrom(BlockPos pos){
         double fromX = pos.getX() + 0.5D;
         double fromY = pos.getY() + 0.3D;

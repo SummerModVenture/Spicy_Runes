@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by Spencer on 5/23/18.
  */
-@Mod.EventBusSubscriber(modid= MainMod.MODID)
+@Mod.EventBusSubscriber(value={Side.CLIENT}, modid= MainMod.MODID)
 public class SunshineClientUpdater implements IMessageHandler<SunshineUpdate, IMessage>{
     //private static Method regenHeightmap = null;
     private static CopyOnWriteArrayList<SunshineUpdate> updates = new CopyOnWriteArrayList<>();

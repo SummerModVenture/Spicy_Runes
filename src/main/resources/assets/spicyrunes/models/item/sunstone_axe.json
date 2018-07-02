@@ -2,8 +2,8 @@
     "parent": "item/generated",
     "textures": {
         "layer0": "spicyrunes:items/tools/sunstone/axe/handle",
-        "layer1": "spicyrunes:items/tools/sunstone/axe/back",
-        "layer2": "spicyrunes:items/tools/sunstone/axe/bottom",
-        "layer3": "spicyrunes:items/tools/sunstone/axe/top"
+        "layer2": "spicyrunes:items/tools/sunstone/axe/back",
+        "layer3": "spicyrunes:items/tools/sunstone/axe/bottom",
+        "layer1": "spicyrunes:items/tools/sunstone/axe/top"
     }
 }

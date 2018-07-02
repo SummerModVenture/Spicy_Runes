@@ -7,6 +7,13 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+
+apply plugin: 'java'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+    options.compilerArgs << '-XDignore.symbol.file=true'
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
@@ -16,9 +23,7 @@ group = "com.spicymemes.runes" // http://maven.apache.org/guides/mini/guide-nami
 archivesBaseName = "spicyrunes"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+
 
 jar {
     manifest {
@@ -64,6 +69,7 @@ dependencies {
     //compileOnly files("/Users/Spencer/Downloads/Common/build/classes/artifacts/spicycore_dev.jar")
     compile project(":core")
     compile group: 'org.ow2.asm', name: 'asm', version: '5.0.3'
+    //println 'doing dependencies'
 }
 
 processResources {
